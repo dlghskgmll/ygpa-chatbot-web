@@ -2,7 +2,7 @@
 
 여수광양항만공사(YGPA) 홈페이지에 붙는 RAG 챗봇 프론트엔드. 캡스톤디자인 팀 크롤러.
 
-**데모**: https://dlghskgmll.github.io/ygpa-chatbot-web/ (간이 데모 페이지 + 목업 응답, `main` push 시 자동 배포)
+**데모**: https://dlghskgmll.github.io/ygpa-chatbot-web/ (홈페이지 캡처 배경 + 목업 응답, `main` push 시 자동 배포)
 
 ## 실행
 
@@ -22,7 +22,8 @@ npm run prepare-host -- ~/Desktop/여수광양항만공사.html
 npm run dev        # http://localhost:5173/host/
 ```
 
-- 이미지·영상은 ygpa.or.kr에서 실시간으로 불러오므로 인터넷이 필요하다. 인터넷이 없으면 간이 데모 `/`를 쓴다.
+- 이미지·영상은 ygpa.or.kr에서 실시간으로 불러오므로 인터넷이 필요하다. 인터넷이 없으면 캡처 배경 데모 `/`를 쓴다.
+- `host/`는 공개 배포하지 않는다. 실제 기관 사이트의 동작하는 복제본이라 피싱·사칭으로 판정될 수 있다. 공개 데모는 캡처 이미지(`public/assets/ygpa-home-capture*.webp`)만 쓴다.
 - 네이버 애널리틱스는 제거한다 (로컬 시연이 YGPA 통계에 잡히지 않게).
 - 위젯은 Shadow DOM 안에 렌더링되어, 사이트의 전역 CSS(`button{padding:0}`, `html{line-height:1}` 등)와 서로 간섭하지 않는다.
 
@@ -54,7 +55,7 @@ src/
     ScreenView.tsx    답변 · 되묻기 · 근거 부족 · 처리 중 · 오류 · 다음 단계 바
     SourcePanel.tsx   근거 패널 (06)
     HelpDialog.tsx    이용안내 (07)
-  demo/HostPage.tsx   간이 호스트 페이지 (실제 YGPA 홈페이지 아님, 오프라인 대체용)
+  demo/CapturePage.tsx  홈페이지 캡처 배경 데모 (공개 데모·오프라인 시연용, 복제본 아님)
   styles/tokens.css   디자인 토큰 (:root / :host 공용)
   styles/widget-base.css  Shadow DOM 기본값 (호스트 상속값 초기화)
 scripts/prepare-host.mjs  저장한 YGPA 페이지 → host/ 변환
