@@ -2,6 +2,8 @@
 
 여수광양항만공사(YGPA) 홈페이지에 붙는 RAG 챗봇 프론트엔드. 캡스톤디자인 팀 크롤러.
 
+**데모**: https://dlghskgmll.github.io/ygpa-chatbot-web/ (간이 데모 페이지 + 목업 응답, `main` push 시 자동 배포)
+
 ## 실행
 
 ```bash
