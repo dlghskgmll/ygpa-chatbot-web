@@ -205,7 +205,8 @@
   text-align: center;
 }
 
-@media (max-width: 640px) {
+/* 확장 패널이 좁아 답변 영역과 나란히 둘 수 없으면(태블릿·모바일) 답변 위를 덮는다 */
+@media (max-width: 1023px) {
   .panel {
     position: absolute;
     inset: 0;
