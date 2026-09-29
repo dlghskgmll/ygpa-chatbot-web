@@ -35,8 +35,9 @@
   z-index: 2147483000;
   display: flex;
   flex-direction: column;
-  width: var(--panel-compact-width);
-  height: min(var(--panel-max-height), calc(var(--vv-height, 100dvh) - 2 * var(--widget-gap)));
+  /* --panel-w/--panel-h: 사용자가 조절한 크기(ResizeHandles). 없으면 기본값, 화면보다 커지지 않게 제한 */
+  width: min(var(--panel-w, var(--panel-compact-width)), calc(var(--vv-width, 100vw) - 2 * var(--widget-gap)));
+  height: min(var(--panel-h, var(--panel-max-height)), calc(var(--vv-height, 100dvh) - 2 * var(--widget-gap)));
   overflow: hidden;
   border-radius: var(--radius-xl);
   background: var(--color-surface);
@@ -49,6 +50,10 @@
   animation: panel-in var(--duration-base) var(--ease-out);
 }
 
+.panel[data-resizing] {
+  user-select: none;
+}
+
 @keyframes panel-in {
   from {
     opacity: 0;
@@ -59,7 +64,7 @@
 .expanded {
   left: 0;
   right: 0;
-  width: min(var(--panel-expanded-width), calc(100vw - 2 * var(--widget-gap)));
+  width: min(var(--panel-w, var(--panel-expanded-width)), calc(var(--vv-width, 100vw) - 2 * var(--widget-gap)));
   margin-inline: auto;
   transform-origin: bottom center;
 }
@@ -155,6 +160,8 @@
   display: flex;
   flex: 1;
   min-height: 0;
+  /* 근거 패널이 패널 폭에 따라 나란히/덮기를 고르도록 컨테이너로 지정 */
+  container-type: inline-size;
 }
 
 .main {

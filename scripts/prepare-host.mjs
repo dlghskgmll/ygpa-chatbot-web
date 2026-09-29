@@ -67,4 +67,12 @@ for (const file of readdirSync(join(outDir, 'files')).filter((f) => f.endsWith('
   writeFileSync(cssPath, css)
 }
 
+// 저장 시 .map 파일은 받지 않으므로 sourceMappingURL 주석을 지워 개발 서버 경고를 없앤다
+for (const file of readdirSync(join(outDir, 'files')).filter((f) => /\.(js|css)$/.test(f))) {
+  const filePath = join(outDir, 'files', file)
+  const source = readFileSync(filePath, 'utf8')
+  const cleaned = source.replace(/\/[/*][#@] sourceMappingURL=\S+(\s*\*\/)?/g, '')
+  if (cleaned !== source) writeFileSync(filePath, cleaned)
+}
+
 console.log('host/ 생성 완료 → npm run dev 후 http://localhost:5173/host/')

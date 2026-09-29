@@ -43,7 +43,8 @@
   list-style: none;
 }
 
-@container (min-width: 600px) {
+/* 카드 하나에 약 200px이 필요해 4열은 넓을 때만 (좁으면 라벨이 줄바꿈된다) */
+@container (min-width: 860px) {
   .grid {
     grid-template-columns: repeat(4, minmax(0, 1fr));
   }

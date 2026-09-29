@@ -1,8 +1,9 @@
 import { ArrowDownLeft, ArrowUpRight, X } from 'lucide-react'
-import { useCallback, useEffect, useRef, useState, type KeyboardEvent } from 'react'
+import { useCallback, useEffect, useRef, useState, type CSSProperties, type KeyboardEvent } from 'react'
 import type { ClarifyOption } from '../api/types'
 import { Composer } from './Composer'
 import { HelpDialog } from './HelpDialog'
+import { ResizeHandles, type PanelSize } from './ResizeHandles'
 import { ActionBar, ScreenView } from './ScreenView'
 import { SourcePanel } from './SourcePanel'
 import { Mascot } from './ui'
@@ -11,6 +12,13 @@ import { WelcomeView } from './WelcomeView'
 import styles from './ChatWidget.module.css'
 
 type Mode = 'compact' | 'expanded'
+
+// 크기 조절 하한. 상한은 화면 크기(여백 제외)
+const RESIZE_LIMITS: Record<Mode, { minWidth: number; minHeight: number }> = {
+  compact: { minWidth: 360, minHeight: 480 },
+  expanded: { minWidth: 600, minHeight: 480 },
+}
+const WIDGET_GAP = 24
 
 /**
  * 홈페이지 우측 하단 런처 → 440px 컴팩트 패널 → 확장 업무 화면(+근거 패널).
@@ -22,7 +30,10 @@ export function ChatWidget() {
   const [citationId, setCitationId] = useState<number | null>(null)
   const [helpOpen, setHelpOpen] = useState(false)
   const [announcement, setAnnouncement] = useState('')
+  // 사용자가 조절한 크기. null이면 기본 크기(tokens.css). 모드별로 따로 기억한다
+  const [sizes, setSizes] = useState<Record<Mode, PanelSize | null>>({ compact: null, expanded: null })
 
+  const panelRef = useRef<HTMLElement>(null)
   const launcherRef = useRef<HTMLButtonElement>(null)
   const composerRef = useRef<HTMLTextAreaElement>(null)
   const scrollRef = useRef<HTMLDivElement>(null)
@@ -100,6 +111,8 @@ export function ChatWidget() {
   const busy = current?.status === 'loading'
   const backLabel = previous?.response?.short_title ?? previous?.response?.title ?? '전체 업무 보기'
   const showActionBar = response?.type === 'answer' && !!response.summary
+  const size = sizes[mode]
+  const panelStyle = size ? ({ '--panel-w': `${size.w}px`, '--panel-h': `${size.h}px` } as CSSProperties) : undefined
 
   if (!open) {
     return (
@@ -118,12 +131,22 @@ export function ChatWidget() {
 
   return (
     <section
+      ref={panelRef}
       className={`${styles.panel} ${mode === 'expanded' ? styles.expanded : ''}`}
+      style={panelStyle}
       role="dialog"
       aria-modal="false"
       aria-labelledby="ygpa-chat-title"
       onKeyDown={handleKeyDown}
     >
+      <ResizeHandles
+        panelRef={panelRef}
+        centered={mode === 'expanded'}
+        gap={WIDGET_GAP}
+        {...RESIZE_LIMITS[mode]}
+        onCommit={(next) => setSizes((prev) => ({ ...prev, [mode]: next }))}
+        onReset={() => setSizes((prev) => ({ ...prev, [mode]: null }))}
+      />
       <header className={styles.header}>
         <h2 id="ygpa-chat-title" className={styles.title}>
           <span className={styles.brand}>YGPA</span> AI 업무도우미

@@ -205,8 +205,8 @@
   text-align: center;
 }
 
-/* 확장 패널이 좁아 답변 영역과 나란히 둘 수 없으면(태블릿·모바일) 답변 위를 덮는다 */
-@media (max-width: 1023px) {
+/* 패널이 좁아 답변 영역과 나란히 둘 수 없으면(태블릿·모바일·사용자가 줄인 경우) 답변 위를 덮는다 */
+@container (max-width: 879px) {
   .panel {
     position: absolute;
     inset: 0;
@@ -215,11 +215,11 @@
     border-left: 0;
     animation-name: sheet-in;
   }
+}
 
-  @keyframes sheet-in {
-    from {
-      opacity: 0;
-      transform: translateY(24px);
-    }
+@keyframes sheet-in {
+  from {
+    opacity: 0;
+    transform: translateY(24px);
   }
 }
